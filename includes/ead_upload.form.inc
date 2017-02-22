@@ -17,6 +17,9 @@
  *   The drupal form definition.
  */
 function islandora_manuscript_ead_upload_form(array $form, array &$form_state) {
+ $bt = debug_backtrace();
+dpm($bt);
+
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
   $extensions = array('xml');
   return array(

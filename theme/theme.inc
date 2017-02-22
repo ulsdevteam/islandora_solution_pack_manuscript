@@ -14,6 +14,14 @@ function islandora_manuscript_preprocess_islandora_manuscript_manuscript(array &
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_manuscript', 'includes/utilities');
   $object = $variables['object'];
+
+  $url = url("islandora/object/{$object->id}", array(
+    'absolute' => TRUE,
+  ));
+  $variables['upitt_viewer_link'] = l('Go to item description', $url, array(
+    'attributes' => array(
+      'class' => array('upitt-viewer-link'))));
+
   $params = array(
     'object' => $object,
     'pages' => islandora_paged_content_get_pages($object),
@@ -342,3 +350,23 @@ function islandora_manuscript_build_flat_subfile_query(array $containers) {
   // Merge down to single array.
   return empty($parts) ? array() : call_user_func_array('array_merge', $parts);
 }
+
+function islandora_upitt_object_uri_if_exists(array $container) {
+  $att = NULL;
+  foreach( $container as $node ) { 
+    $att = $node->getAttribute('ns2:href');
+  }
+  if ($att) {
+    $object = islandora_object_load('pitt:' . $att);
+    if (is_object($object)) {
+      error_log('ok pitt:' . $att);
+      return 'true';
+    }
+    else {
+      error_log('NO pitt:' . $att);
+    }
+  }
+  error_log('NO pitt:' . $att);
+  return 'false';
+}
+

@@ -18,5 +18,9 @@
  */
 ?>
 <div <?php echo $attributes; ?> <?php echo drupal_attributes(array('class' => $classes)); ?>>
-  <?php echo $markup_doc->saveXML($markup_doc->documentElement); ?>
+<?php 
+  $doc_markup = $markup_doc->saveXML($markup_doc->documentElement);
+  $doc_markup = (function_exists('ead_highlight_search_terms')) ? ead_highlight_search_terms($doc_markup) : $doc_markup; 
+  echo $doc_markup;
+?>
 </div>

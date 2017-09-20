@@ -359,14 +359,9 @@ function islandora_upitt_object_uri_if_exists(array $container) {
   if ($att) {
     $object = islandora_object_load('pitt:' . $att);
     if (is_object($object)) {
-      error_log('ok pitt:' . $att);
       return 'true';
     }
-    else {
-      error_log('NO pitt:' . $att);
-    }
   }
-  error_log('NO pitt:' . $att);
   return 'false';
 }
 

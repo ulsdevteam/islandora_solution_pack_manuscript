@@ -177,7 +177,12 @@ function islandora_manuscript_pages_menu(AbstractObject $object) {
 function islandora_manuscript_theme() {
   return array(
     'islandora_manuscript_manuscript' => array(
-      'variables' => array('object' => NULL),
+      'variables' => array(
+        'object' => NULL,
+        'viewer_wrapper_attributes' => array(
+          'id' => 'manuscript-viewer',
+        ),
+      ),
       'file' => 'theme/theme.inc',
       'template' => 'theme/islandora-manuscript-manuscript',
     ),
@@ -390,12 +395,12 @@ function islandora_manuscript_islandora_transformcmodel_islandora_ingest_steps()
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_get_transforms().
+ * Implements hook_xml_form_builder_get_transforms().
  *
  * No default form is defined for EAD, but if someone should add one they can
  * use this transform.
  */
-function islandora_manuscript_islandora_xml_form_builder_get_transforms() {
+function islandora_manuscript_xml_form_builder_get_transforms() {
   $module_path = drupal_get_path('module', 'islandora_manuscript');
   return array(
     'ead_to_dc.xsl' => "{$module_path}/data/transforms/ead_to_dc.xsl",
@@ -403,9 +408,9 @@ function islandora_manuscript_islandora_xml_form_builder_get_transforms() {
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_form_associations().
+ * Implements hook_xml_form_builder_form_associations().
  */
-function islandora_manuscript_islandora_xml_form_builder_form_associations() {
+function islandora_manuscript_xml_form_builder_form_associations() {
   return array(
     'islandora_manuscript_mods_form' => array(
       'content_model' => 'islandora:manuscriptCModel',
@@ -419,9 +424,9 @@ function islandora_manuscript_islandora_xml_form_builder_form_associations() {
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_forms().
+ * Implements hook_xml_form_builder_forms().
  */
-function islandora_manuscript_islandora_xml_form_builder_forms() {
+function islandora_manuscript_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_manuscript');
   return array(
     'Manuscript MODS form' => array(

@@ -362,3 +362,37 @@ function islandora_manuscript_build_flat_subfile_query(array $containers) {
   // Merge down to single array.
   return empty($parts) ? array() : call_user_func_array('array_merge', $parts);
 }
+
+function islandora_upitt_object_uri_if_exists(array $container) {
+  $att = NULL;
+  foreach( $container as $node ) { 
+    $att = $node->getAttribute('ns2:href');
+  }
+  if ($att) {
+    $object = islandora_object_load('pitt:' . $att);
+    if (is_object($object)) {
+      // Check this object's site relationships to see if it is actually
+      // published on the current site.
+      $site_relationships = $object->relationships->get('http://digital.library.pitt.edu/ontology/relations#', 'isMemberOfSite');
+
+      // Check the base-solr filter to see which site we are on.
+      @list($junk, $keep) = explode('RELS_EXT_isMemberOfSite_uri_ms:', variable_get('islandora_solr_base_filter', ''));
+      @list($site_pid, $junk) = explode(" ", $keep);
+      if ($site_pid) {
+        $site_pid = str_replace(array('info\\:fedora\\/pitt\\:', chr(10), chr(13)), array('pitt:', '', ''), $site_pid);
+        $matched_site = FALSE;
+        foreach ($site_relationships as $relationship) {
+          if (array_key_exists('object', $relationship) && array_key_exists('value', $relationship['object'])) {
+            $matched_site |= ($relationship['object']['value'] == $site_pid);
+          }
+        }
+        return (($matched_site) ? 'true' : 'false');
+      }
+      else {
+        return 'true';
+      }
+    }
+  }
+  return 'false';
+}
+

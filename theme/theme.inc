@@ -376,15 +376,30 @@ function islandora_upitt_object_uri_if_exists(array $container) {
   foreach( $container as $node ) { 
     $att = $node->getAttribute('ns2:href');
   }
-  if ($att && (strstr($att, ' ') == '')) {
+  if ($att) {
     $object = islandora_object_load('pitt:' . $att);
     if (is_object($object)) {
-      return 'true';
+      // Check this object's site relationships to see if it is actually
+      // published on the current site.
+      $site_relationships = $object->relationships->get('http://digital.library.pitt.edu/ontology/relations#', 'isMemberOfSite');
+
+      // Check the base-solr filter to see which site we are on.
+      @list($junk, $keep) = explode('RELS_EXT_isMemberOfSite_uri_ms:', variable_get('islandora_solr_base_filter', ''));
+      @list($site_pid, $junk) = explode(" ", $keep);
+      if ($site_pid) {
+        $site_pid = str_replace(array('info\\:fedora\\/pitt\\:', chr(10), chr(13)), array('pitt:', '', ''), $site_pid);
+        $matched_site = FALSE;
+        foreach ($site_relationships as $relationship) {
+          if (array_key_exists('object', $relationship) && array_key_exists('value', $relationship['object'])) {
+            $matched_site |= ($relationship['object']['value'] == $site_pid);
+          }
+        }
+        return (($matched_site) ? 'true' : 'false');
+      }
+      else {
+        return 'true';
+      }
     }
-  }
-  elseif (strstr($att, ' ') == ' ') {
-    // If the PID value has a space, enter a watchdog message
-    watchdog('islandora', 'ns2:href reference in EAD contained a space character', array(), WATCHDOG_NOTICE);
   }
   return 'false';
 }

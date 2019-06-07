@@ -198,6 +198,8 @@ function islandora_manuscript_theme() {
         'xslt_functions' => array(
           'islandora_manuscript_build_parented_query_url',
           'islandora_manuscript_build_flat_query_url',
+          // upitt -- function to test whether or not an object exists
+          'islandora_upitt_object_uri_if_exists',
         ),
         'doc' => NULL,
         'xslt_doc' => NULL,
@@ -343,7 +345,7 @@ function islandora_manuscript_islandora_required_objects(IslandoraTuque $connect
 function islandora_manuscript_islandora_findingaidcmodel_islandora_ingest_steps() {
   return array(
     'islandora_manuscript_ead_upload' => array(
-      'weight' => 10,
+      'weight' => -1,
       'type' => 'form',
       'form_id' => 'islandora_manuscript_ead_upload_form',
       'module' => 'islandora_manuscript',

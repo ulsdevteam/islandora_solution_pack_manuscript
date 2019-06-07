@@ -14,6 +14,14 @@ function template_preprocess_islandora_manuscript_manuscript(array &$variables) 
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_manuscript', 'includes/utilities');
   $object = $variables['object'];
+
+  $url = url("islandora/object/{$object->id}", array(
+    'absolute' => TRUE,
+  ));
+  $variables['upitt_viewer_link'] = l('Go to item description', $url, array(
+    'attributes' => array(
+      'class' => array('upitt-viewer-link'))));
+
   $params = array(
     'object' => $object,
     'pages' => islandora_paged_content_get_pages($object),

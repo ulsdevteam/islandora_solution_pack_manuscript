@@ -4,8 +4,9 @@
  * Template file to style output.
  */
 ?>
+<p class="subtitle"><?php print $upitt_viewer_link; ?></p>
 <?php if (isset($viewer)): ?>
-  <div <?php print drupal_attributes($viewer_wrapper_attributes); ?>>
+  <div id="book-viewer">
     <?php print $viewer; ?>
   </div>
 <?php endif; ?>

@@ -354,7 +354,7 @@ function islandora_manuscript_build_flat_subfile_query(array $containers) {
 function islandora_upitt_object_uri_if_exists(array $container) {
   $att = NULL;
   foreach( $container as $node ) { 
-    $att = $node->getAttribute('ns2:href');
+    $att = $node->getAttribute('xlink:href');
   }
   if ($att && (strstr($att, ' ') == '')) {
     $object = islandora_object_load('pitt:' . $att);
@@ -383,7 +383,7 @@ function islandora_upitt_object_uri_if_exists(array $container) {
   }
   elseif (strstr($att, ' ') == ' ') {
     // If the PID value has a space, enter a watchdog message
-    watchdog('islandora', 'ns2:href reference in EAD contained a space character', array(), WATCHDOG_NOTICE);
+    watchdog('islandora', 'xlink:href reference in EAD contained a space character', array(), WATCHDOG_NOTICE);
   }
   return 'false';
 }

@@ -354,7 +354,7 @@ function islandora_manuscript_build_flat_subfile_query(array $containers) {
 function islandora_upitt_object_uri_if_exists(array $container) {
   $att = NULL;
   foreach( $container as $node ) { 
-    $att = $node->getAttribute('xlink:href');
+    $att = $node->getAttributeNS('http://www.w3.org/1999/xlink', 'href');
   }
   if ($att && (strstr($att, ' ') == '')) {
     $object = islandora_object_load('pitt:' . $att);
